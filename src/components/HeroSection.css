@@ -1,0 +1,115 @@
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 500vh;
+  background: var(--darker-bg);
+}
+
+.hero-canvas {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title-line {
+  font-size: clamp(2rem, 5vw, 4rem);
+  letter-spacing: 12px;
+  color: var(--text-white);
+  text-shadow: 0 0 40px rgba(212, 175, 55, 0.6),
+               0 0 80px rgba(212, 175, 55, 0.3);
+  font-weight: 400;
+}
+
+.title-line-large {
+  font-size: clamp(6rem, 15vw, 13rem);
+  letter-spacing: 24px;
+  background: linear-gradient(135deg, #ffffff 0%, var(--accent-gold) 50%, var(--accent-teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.8)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  margin-top: 2rem;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  letter-spacing: 8px;
+  color: var(--accent-gold);
+  text-shadow: 0 0 30px var(--accent-gold);
+  font-weight: 300;
+}
+
+.hero-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to bottom, transparent, var(--darker-bg));
+  pointer-events: none;
+}
+
+.frame-counter {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  color: var(--accent-gold);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--accent-gold);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  text-shadow: 0 0 10px var(--accent-gold);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    height: 400vh;
+  }
+
+  .frame-counter {
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .title-line {
+    letter-spacing: 4px;
+  }
+
+  .title-line-large {
+    letter-spacing: 10px;
+  }
+
+  .hero-subtitle {
+    letter-spacing: 3px;
+  }
+}
