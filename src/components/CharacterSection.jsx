@@ -20,12 +20,12 @@ const CharacterSection = ({ character, index }) => {
   // Scroll-based frame transitions
   useEffect(() => {
     const unsubscribe = scrollYProgress.on('change', (latest) => {
-      if (latest > 0.15 && latest < 0.85) {
-        const frameProgress = (latest - 0.15) / 0.7
+      if (latest > 0.1 && latest < 0.9) {
+        const frameProgress = (latest - 0.1) / 0.8
         const totalFrames = character.images.length
         const frameIndex = Math.floor(frameProgress * totalFrames)
         setCurrentFrame(Math.min(frameIndex, totalFrames - 1))
-      } else if (latest <= 0.15) {
+      } else if (latest <= 0.1) {
         setCurrentFrame(0)
       }
     })
@@ -47,6 +47,7 @@ const CharacterSection = ({ character, index }) => {
       }
     }
   }
+
 
   const itemVariants = {
     hidden: { opacity: 0, y: 50 },
