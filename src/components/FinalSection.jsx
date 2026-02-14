@@ -10,6 +10,27 @@ const FinalSection = () => {
 
   return (
     <section className="final-section" id="preorder" ref={ref}>
+      {/* Corner Text Elements */}
+      <motion.div 
+        className="corner-text top-left"
+        initial={{ opacity: 0, x: -30, y: -30 }}
+        animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: -30, y: -30 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
+        <div className="corner-label">GRAND THEFT AUTO</div>
+        <div className="corner-number">VI</div>
+      </motion.div>
+
+      <motion.div 
+        className="corner-text top-right"
+        initial={{ opacity: 0, x: 30, y: -30 }}
+        animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: 30, y: -30 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+      >
+        <div className="corner-subtitle">WELCOME TO</div>
+        <div className="corner-location">VICE CITY</div>
+      </motion.div>
+
       <div className="final-content">
         <motion.h2 
           className="final-title"
@@ -19,7 +40,7 @@ const FinalSection = () => {
         >
           THE HEIST<br />BEGINS
         </motion.h2>
-        
+      
         <motion.p 
           className="final-text"
           initial={{ opacity: 0, y: 30 }}

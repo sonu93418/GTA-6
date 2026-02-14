@@ -18,25 +18,36 @@ const HeroSection = () => {
   const scale = useTransform(scrollYProgress, [0, 0.8, 1], [1, 1.05, 1.1])
 
   useEffect(() => {
+    const startFrame = 90 // Skip first 90 frames
     const frameCount = 230
     const loadedImages = []
 
     const loadImages = async () => {
       const imagePromises = []
       
-      for (let i = 0; i < frameCount; i++) {
+      for (let i = startFrame; i < frameCount; i++) {
         const img = new Image()
         const frameNum = String(i).padStart(3, '0')
-        // Try both with and without encoded spaces
-        img.src = `/hero section/frame_${frameNum}_delay-0.033s.png`
+        // Alternate between delay patterns (033 and 034)
+        const delay = (i % 3 === 1 || i % 3 === 2) ? '0.033s' : '0.034s'
+        
+        // Try the path with URL encoding for spaces
+        img.src = `/hero%20section/frame_${frameNum}_delay-${delay}.png`
+        
         imagePromises.push(
           new Promise((resolve) => {
             img.onload = () => resolve(img)
             img.onerror = () => {
-              // Try alternate path
-              img.src = `/hero%20section/frame_${frameNum}_delay-0.033s.png`
+              // Try without encoding
+              img.src = `/hero section/frame_${frameNum}_delay-${delay}.png`
               img.onload = () => resolve(img)
-              img.onerror = () => resolve(null)
+              img.onerror = () => {
+                // Try with the alternate delay pattern
+                const altDelay = delay === '0.033s' ? '0.034s' : '0.033s'
+                img.src = `/hero%20section/frame_${frameNum}_delay-${altDelay}.png`
+                img.onload = () => resolve(img)
+                img.onerror = () => resolve(null)
+              }
             }
           })
         )
@@ -44,7 +55,7 @@ const HeroSection = () => {
       }
 
       await Promise.all(imagePromises)
-      setImages(loadedImages)
+      setImages(loadedImages.filter(img => img !== null))
       setImagesLoaded(true)
     }
 
@@ -67,9 +78,9 @@ const HeroSection = () => {
 
     const render = () => {
       const scrollFraction = scrollYProgress.get()
-      // Map scroll to frame index - ensure we cover all 230 frames
+      // Map scroll to frame index smoothly across all frames
       const frameIndex = Math.min(
-        Math.floor(scrollFraction * (images.length - 1)),
+        Math.floor(scrollFraction * images.length),
         images.length - 1
       )
 
@@ -80,16 +91,27 @@ const HeroSection = () => {
 
       context.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Cover entire canvas
-      const scale = Math.max(
-        canvas.width / img.width,
-        canvas.height / img.height
-      )
+      // Scale to cover entire canvas while maintaining aspect ratio
+      const canvasAspect = canvas.width / canvas.height
+      const imgAspect = img.width / img.height
+      
+      let drawWidth, drawHeight, offsetX, offsetY
+      
+      if (canvasAspect > imgAspect) {
+        // Canvas is wider - fit to width
+        drawWidth = canvas.width
+        drawHeight = canvas.width / imgAspect
+        offsetX = 0
+        offsetY = (canvas.height - drawHeight) / 2
+      } else {
+        // Canvas is taller - fit to height
+        drawHeight = canvas.height
+        drawWidth = canvas.height * imgAspect
+        offsetX = (canvas.width - drawWidth) / 2
+        offsetY = 0
+      }
 
-      const x = (canvas.width - img.width * scale) / 2
-      const y = (canvas.height - img.height * scale) / 2
-
-      context.drawImage(img, x, y, img.width * scale, img.height * scale)
+      context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
     }
 
     const unsubscribe = scrollYProgress.on('change', render)
@@ -126,16 +148,6 @@ const HeroSection = () => {
           WELCOME TO VICE CITY
         </motion.div>
       </motion.div>
-      {imagesLoaded && (
-        <motion.div 
-          className="frame-counter"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.5 }}
-          transition={{ delay: 3 }}
-        >
-          {currentFrame + 1} / {images.length}
-        </motion.div>
-      )}
       <div className="hero-gradient" />
     </section>
   )
