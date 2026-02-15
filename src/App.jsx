@@ -6,11 +6,13 @@ import HeroSection from './components/HeroSection'
 import CharacterSection from './components/CharacterSection'
 import FinalSection from './components/FinalSection'
 import CharacterModal from './components/CharacterModal'
+import CharacterGallery from './components/CharacterGallery'
 import './App.css'
 
 function App() {
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
+  const [galleryOpen, setGalleryOpen] = useState(false)
   const [selectedCharacter, setSelectedCharacter] = useState(null)
 
   useEffect(() => {
@@ -120,6 +122,16 @@ function App() {
     setModalOpen(false)
   }
 
+  const openGallery = (character) => {
+    setSelectedCharacter(character)
+    setModalOpen(false)
+    setGalleryOpen(true)
+  }
+
+  const closeGallery = () => {
+    setGalleryOpen(false)
+  }
+
   return (
     <>
       {loading && <LoadingScreen />}
@@ -131,8 +143,8 @@ function App() {
             key={character.id} 
             character={character} 
             index={index}
-            onSelectCharacter={() => openModal(character)}
-            onLearnMore={() => openModal(character)}
+            onSelectCharacter={() => openGallery(character)}
+            onLearnMore={() => openGallery(character)}
           />
         ))}
         <FinalSection />
@@ -142,6 +154,12 @@ function App() {
         onClose={closeModal}
         characters={characters}
         selectedCharacter={selectedCharacter}
+        onOpenGallery={openGallery}
+      />
+      <CharacterGallery
+        isOpen={galleryOpen}
+        onClose={closeGallery}
+        character={selectedCharacter}
       />
     </>
   )

@@ -1,11 +1,10 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import './CharacterSection.css'
 
 const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) => {
   const sectionRef = useRef(null)
-  const [currentFrame, setCurrentFrame] = useState(0)
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -35,30 +34,7 @@ const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) 
     }
   }
 
-  // Debug: Log when component renders
-  useEffect(() => {
-    console.log('🎬 CharacterSection rendered for:', character.id, character.name)
-  }, [])
-
-  // Scroll-based frame transitions
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on('change', (latest) => {
-      if (latest > 0.1 && latest < 0.9) {
-        const frameProgress = (latest - 0.1) / 0.8
-        const totalFrames = character.images.length
-        const frameIndex = Math.floor(frameProgress * totalFrames)
-        setCurrentFrame(Math.min(frameIndex, totalFrames - 1))
-      } else if (latest <= 0.1) {
-        setCurrentFrame(0)
-      }
-    })
-
-    return () => unsubscribe()
-  }, [scrollYProgress, character.images.length])
-
-  const y = useTransform(scrollYProgress, [0, 0.5, 1], [50, 0, -50])
   const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.15, 0.5, 0.85, 1], [0.85, 1, 1.02, 1, 0.95])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -97,58 +73,28 @@ const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) 
       />
 
       <div ref={ref} className="character-container">
+        {/* Character Photo Frames */}
         <motion.div 
-          className="character-image-wrapper"
-          style={{ y, scale }}
+          className="character-photo-frames"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
         >
           {character.images.map((img, i) => (
-            <motion.img
+            <motion.div
               key={i}
-              src={img}
-              alt={`${character.name} - Frame ${i + 1}`}
-              className={`character-img char-img-${i + 1}`}
-              style={{
-                opacity: currentFrame === i ? 1 : 0,
-                zIndex: currentFrame === i ? 10 : i
-              }}
-              initial={{ opacity: 0 }}
-              animate={inView && currentFrame === i ? { 
-                opacity: 1
-              } : { 
-                opacity: 0
-              }}
-              transition={{ 
-                duration: 0.7,
-                ease: [0.43, 0.13, 0.23, 0.96]
-              }}
-            />
+              className="photo-frame"
+              initial={{ y: 50, opacity: 0 }}
+              animate={inView ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 + i * 0.15 }}
+              whileHover={{ scale: 1.05, y: -10 }}
+            >
+              <div className="frame-border" style={{ borderColor: character.color }}>
+                <img src={img} alt={`${character.name} - Photo ${i + 1}`} className="frame-photo" />
+                <div className="frame-overlay" style={{ background: `linear-gradient(to top, ${character.color}20, transparent)` }} />
+              </div>
+            </motion.div>
           ))}
-          
-          <motion.div 
-            className="image-accent"
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 0.12 } : { opacity: 0 }}
-            transition={{ duration: 1 }}
-            style={{ background: `radial-gradient(circle at center, ${character.color}30 0%, transparent 65%)` }}
-          />
-
-          {/* Frame indicator */}
-          <div className="frame-indicator">
-            {character.images.map((_, i) => (
-              <motion.div
-                key={i}
-                className={`frame-dot ${currentFrame === i ? 'active' : ''}`}
-                animate={{
-                  scale: currentFrame === i ? 1.3 : 1,
-                  opacity: currentFrame === i ? 1 : 0.4
-                }}
-                style={{ 
-                  backgroundColor: currentFrame === i ? character.color : '#ffffff40'
-                }}
-                transition={{ duration: 0.4 }}
-              />
-            ))}
-          </div>
         </motion.div>
 
         <motion.div 

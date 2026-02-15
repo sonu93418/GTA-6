@@ -125,29 +125,10 @@ const HeroSection = () => {
 
   return (
     <section className="hero-section" id="hero" ref={containerRef}>
-      <canvas ref={canvasRef} className="hero-canvas" />
-      <motion.div 
-        className="hero-content"
-        style={{ opacity, scale }}
-      >
-        <motion.h1 
-          className="hero-title"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 2.8 }}
-        >
-          <span className="title-line">GRAND THEFT AUTO</span>
-          <span className="title-line-large">VI</span>
-        </motion.h1>
-        <motion.div 
-          className="hero-subtitle"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 3.2 }}
-        >
-          WELCOME TO VICE CITY
-        </motion.div>
-      </motion.div>
+      <div className="hero-sticky-wrapper">
+        <canvas ref={canvasRef} className="hero-canvas" />
+      </div>
+
       <div className="hero-gradient" />
     </section>
   )

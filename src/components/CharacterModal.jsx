@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import './CharacterModal.css'
 
-const CharacterModal = ({ isOpen, onClose, characters, selectedCharacter }) => {
+const CharacterModal = ({ isOpen, onClose, characters, selectedCharacter, onOpenGallery }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -59,8 +59,9 @@ const CharacterModal = ({ isOpen, onClose, characters, selectedCharacter }) => {
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     console.log('Character selected:', character.name)
-                    alert(`You selected: ${character.name.replace(/\\n/g, ' ')}!`)
-                    onClose()
+                    if (onOpenGallery) {
+                      onOpenGallery(character)
+                    }
                   }}
                 >
                   <div className="card-image-wrapper">

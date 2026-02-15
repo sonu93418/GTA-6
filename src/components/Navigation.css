@@ -65,7 +65,6 @@
   transform: translateX(-3px);
   transition: transform 0.3s ease;
 }
-
 .nav-item:hover::before,
 .nav-item.active::before {
   transform: translateX(0);
@@ -80,11 +79,6 @@
   background: rgba(212, 175, 55, 0.15);
   border-color: var(--accent-gold);
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-  transform: translateX(-5px);
-}
-
-.nav-item:active {
-  transform: translateX(-3px) scale(0.98);
 }
 
 .nav-number {
