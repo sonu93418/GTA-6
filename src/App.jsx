@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Lenis from 'lenis'
 import LoadingScreen from './components/LoadingScreen'
+import WelcomeScreen from './components/WelcomeScreen'
 import Navigation from './components/Navigation'
 import HeroSection from './components/HeroSection'
 import CharacterSection from './components/CharacterSection'
@@ -13,6 +14,7 @@ import './App.css'
 
 function App() {
   const [loading, setLoading] = useState(true)
+  const [welcomeComplete, setWelcomeComplete] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [selectedCharacter, setSelectedCharacter] = useState(null)
@@ -141,6 +143,9 @@ function App() {
   return (
     <>
       {loading && <LoadingScreen />}
+      {!loading && !welcomeComplete && (
+        <WelcomeScreen onComplete={() => setWelcomeComplete(true)} />
+      )}
       <ScrollProgress />
       <ScrollToTop />
       <Navigation onCharactersClick={() => setModalOpen(true)} />

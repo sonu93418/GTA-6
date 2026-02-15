@@ -4,67 +4,175 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 50%, #0a0a1a 100%);
+  background: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
+  overflow: hidden;
 }
 
 .loading-content {
   text-align: center;
-  max-width: 500px;
-  width: 90%;
+  max-width: 90%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 }
 
 .loading-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-gta {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(4rem, 10vw, 8rem);
+  font-size: clamp(2rem, 6vw, 4rem);
   font-weight: 700;
-  letter-spacing: 12px;
-  background: linear-gradient(90deg, #ffffff, var(--accent-gold), var(--accent-teal), #ffffff);
-  background-size: 200% auto;
+  letter-spacing: clamp(6px, 1.5vw, 12px);
+  line-height: 1.2;
+  background: linear-gradient(
+    135deg,
+    #ff006e 0%,
+    #ff4d8f 10%,
+    #d4af37 20%,
+    #ffd700 30%,
+    #00f5ff 40%,
+    #00d4ff 50%,
+    #d4af37 60%,
+    #ffd700 70%,
+    #ff006e 80%,
+    #ff1a75 90%,
+    #ff006e 100%
+  );
+  background-size: 400% 400%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 3s linear infinite;
-  filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.6));
-  margin-bottom: 3rem;
+  animation: gradientFlow 10s ease infinite;
+  text-transform: uppercase;
+  max-width: 95%;
 }
 
-@keyframes shimmer {
-  to {
-    background-position: 200% center;
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.loading-bar-wrapper {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .loading-bar {
   width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 1.5rem;
   position: relative;
+  border: 1px solid rgba(212, 175, 55, 0.15);
 }
 
-.loading-progress {
+.loading-fill {
+  width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-gold), var(--accent-teal));
-  box-shadow: 0 0 20px var(--accent-gold),
-              0 0 40px var(--accent-gold);
-  border-radius: 2px;
+  background: linear-gradient(90deg, 
+    #ff006e 0%,
+    #d4af37 25%, 
+    #00f5ff 50%,
+    #d4af37 75%,
+    #ff006e 100%);
+  background-size: 200% 100%;
+  transform-origin: left;
+  animation: barShimmer 3s linear infinite;
+  border-radius: 8px;
+}
+
+@keyframes barShimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 .loading-text {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
   letter-spacing: 4px;
-  color: var(--text-gray);
-  animation: pulse 2s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(212, 175, 55, 0.9) 50%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeInOut 2s ease-in-out infinite, textShimmer 3s linear infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+@keyframes textShimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% { 
+    opacity: 0.4; 
+  }
+  50% { 
+    opacity: 1; 
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .loading-content {
+    gap: 3rem;
+  }
+
+  .logo-gta {
+    font-size: 1.8rem;
+    letter-spacing: 5px;
+  }
+
+  .loading-bar {
+    height: 3px;
+  }
+
+  .loading-text {
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-gta {
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+  }
+
+  .loading-text {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+  }
 }
