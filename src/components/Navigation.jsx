@@ -62,13 +62,13 @@ const Navigation = ({ onCharactersClick }) => {
           </motion.button>
 
           <motion.button
-            className={`nav-item ${activeSection === 'preorder' ? 'active' : ''}`}
-            onClick={() => scrollToSection('preorder')}
+            className={`nav-item ${activeSection === 'poster' ? 'active' : ''}`}
+            onClick={() => scrollToSection('poster')}
             whileHover={{ scale: 1.05, x: -10 }}
             transition={{ type: 'spring', stiffness: 400 }}
           >
             <span className="nav-number">03</span>
-            <span className="nav-label">PRE-ORDER</span>
+            <span className="nav-label">POSTER</span>
           </motion.button>
         </div>
 

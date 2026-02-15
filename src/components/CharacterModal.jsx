@@ -101,7 +101,6 @@ const CharacterModal = ({ isOpen, onClose, characters, selectedCharacter, onOpen
                         </div>
                       ))}
                     </div>
-
                     <button 
                       className="card-select-btn"
                       style={{ backgroundColor: character.color }}

@@ -127,6 +127,21 @@ const HeroSection = () => {
     <section className="hero-section" id="hero" ref={containerRef}>
       <div className="hero-sticky-wrapper">
         <canvas ref={canvasRef} className="hero-canvas" />
+        
+        {/* Welcome Text Overlay */}
+        <motion.div
+          className="hero-welcome"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ 
+            opacity: currentFrame > 3 && currentFrame < images.length - 20 ? 1 : 0,
+            y: currentFrame > 3 && currentFrame < images.length - 20 ? 0 : 20
+          }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
+          <div className="welcome-line">WELCOME TO</div>
+          <div className="welcome-city">VICE CITY</div>
+          <div className="welcome-tagline">Your story begins here</div>
+        </motion.div>
       </div>
 
       <div className="hero-gradient" />

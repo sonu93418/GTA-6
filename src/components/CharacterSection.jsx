@@ -1,16 +1,11 @@
-import { useRef, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import './CharacterSection.css'
 
 const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) => {
   const sectionRef = useRef(null)
   
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start']
-  })
-
   const { ref, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
@@ -34,28 +29,26 @@ const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) 
     }
   }
 
-  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0])
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
+        duration: 0.5,
+        staggerChildren: 0.1
       }
     }
   }
 
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
-        ease: [0.6, 0.05, 0.01, 0.9]
+        duration: 0.5,
+        ease: 'easeOut'
       }
     }
   }
@@ -65,65 +58,42 @@ const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) 
       ref={sectionRef}
       className={`character-section ${character.reverse ? 'reverse' : ''}`}
       data-character={character.id}
-      style={{ '--accent-color': character.color }}
+      style={{ 
+        '--accent-color': character.color,
+        '--bg-image': `url(${character.backgroundImage})`
+      }}
     >
-      <motion.div 
-        className="character-bg"
-        style={{ opacity: useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.3, 0]) }}
-      />
+      <div className="character-bg" />
+      
+      <div className="character-bg-overlay" />
 
       <div ref={ref} className="character-container">
-        {/* Character Photo Frames */}
-        <motion.div 
-          className="character-photo-frames"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        >
-          {character.images.map((img, i) => (
-            <motion.div
-              key={i}
-              className="photo-frame"
-              initial={{ y: 50, opacity: 0 }}
-              animate={inView ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 + i * 0.15 }}
-              whileHover={{ scale: 1.05, y: -10 }}
-            >
-              <div className="frame-border" style={{ borderColor: character.color }}>
-                <img src={img} alt={`${character.name} - Photo ${i + 1}`} className="frame-photo" />
-                <div className="frame-overlay" style={{ background: `linear-gradient(to top, ${character.color}20, transparent)` }} />
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
+        {/* Character Info Card */}
         <motion.div 
           className="character-content"
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          <motion.div className="character-label" variants={itemVariants} style={{ opacity }}>
+          <motion.div className="character-label" variants={itemVariants}>
             {character.label}
           </motion.div>
           
-          <motion.h2 className="character-name" variants={itemVariants} style={{ opacity }}>
+          <motion.h2 className="character-name" variants={itemVariants}>
             {character.name.split('\n').map((line, i) => (
               <span key={i}>{line}<br /></span>
             ))}
           </motion.h2>
 
-          <motion.p className="character-description" variants={itemVariants} style={{ opacity }}>
+          <motion.p className="character-description" variants={itemVariants}>
             {character.description}
           </motion.p>
 
-          <motion.div className="character-stats" variants={itemVariants} style={{ opacity }}>
+          <motion.div className="character-stats" variants={itemVariants}>
             {character.stats.map((stat, i) => (
-              <motion.div 
+              <div 
                 key={i} 
                 className="stat"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 400 }}
               >
                 <div className="stat-label">{stat.label}</div>
                 <div className="stat-bar">
@@ -131,11 +101,11 @@ const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) 
                     className="stat-fill"
                     initial={{ width: 0 }}
                     animate={inView ? { width: `${stat.value}%` } : { width: 0 }}
-                    transition={{ duration: 1.5, delay: 0.5 + i * 0.1, ease: 'easeOut' }}
+                    transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
                   />
                 </div>
                 <div className="stat-value">{stat.value}</div>
-              </motion.div>
+              </div>
             ))}
           </motion.div>
 
@@ -167,6 +137,30 @@ const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) 
               <span className="button-text">LEARN MORE</span>
             </button>
           </motion.div>
+        </motion.div>
+
+        {/* Character Photo Frames Grid */}
+        <motion.div 
+          className="character-photo-frames"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {character.images.map((img, i) => (
+            <motion.div
+              key={i}
+              className={`photo-frame frame-${i + 1}`}
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
+            >
+              <div className="frame-border">
+                <img src={img} alt={`${character.name} - Photo ${i + 1}`} className="frame-photo" />
+                <div className="frame-overlay" style={{ background: `linear-gradient(to top, ${character.color}20, transparent)` }} />
+                <div className="frame-number" style={{ color: character.color }}>{String(i + 1).padStart(2, '0')}</div>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>

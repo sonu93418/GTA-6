@@ -4,9 +4,11 @@ import LoadingScreen from './components/LoadingScreen'
 import Navigation from './components/Navigation'
 import HeroSection from './components/HeroSection'
 import CharacterSection from './components/CharacterSection'
-import FinalSection from './components/FinalSection'
+import PosterSection from './components/PosterSection'
 import CharacterModal from './components/CharacterModal'
 import CharacterGallery from './components/CharacterGallery'
+import ScrollProgress from './components/ScrollProgress'
+import ScrollToTop from './components/ScrollToTop'
 import './App.css'
 
 function App() {
@@ -51,6 +53,7 @@ function App() {
         '/page -1 Jason Duval/Jason_Duval_04.webp',
         '/page -1 Jason Duval/Jason_Duval_05.921c79be.jpg'
       ],
+      backgroundImage: '/page -1 Jason Duval/Jason_Duval_05.921c79be.jpg',
       stats: [
         { label: 'DRIVING', value: 95 },
         { label: 'SHOOTING', value: 75 },
@@ -68,6 +71,7 @@ function App() {
         '/page-2 Lucia Caminos/Lucia_Caminos_04.76419a9d.jpg',
         '/page-2 Lucia Caminos/mobile.webp'
       ],
+      backgroundImage: '/page-2 Lucia Caminos/Lucia_Caminos_04.76419a9d.jpg',
       stats: [
         { label: 'INTELLIGENCE', value: 92 },
         { label: 'SHOOTING', value: 88 },
@@ -86,6 +90,7 @@ function App() {
         '/page-3 Raul Bautista/Raul_Bautista_03.webp',
         '/page-3 Raul Bautista/Hero_BG.webp'
       ],
+      backgroundImage: '/page-3 Raul Bautista/Hero_BG.webp',
       stats: [
         { label: 'HACKING', value: 98 },
         { label: 'INTELLIGENCE', value: 90 },
@@ -103,6 +108,7 @@ function App() {
         '/page-4 Real Dimez/Real_Dimez_03.webp',
         '/page-4 Real Dimez/Hero_BG.webp'
       ],
+      backgroundImage: '/page-4 Real Dimez/Hero_BG.webp',
       stats: [
         { label: 'STRENGTH', value: 96 },
         { label: 'SHOOTING', value: 94 },
@@ -135,6 +141,8 @@ function App() {
   return (
     <>
       {loading && <LoadingScreen />}
+      <ScrollProgress />
+      <ScrollToTop />
       <Navigation onCharactersClick={() => setModalOpen(true)} />
       <main>
         <HeroSection />
@@ -147,7 +155,7 @@ function App() {
             onLearnMore={() => openGallery(character)}
           />
         ))}
-        <FinalSection />
+        <PosterSection />
       </main>
       <CharacterModal 
         isOpen={modalOpen}
