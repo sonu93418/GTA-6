@@ -144,12 +144,28 @@ const PosterSection = () => {
           </div>
         </motion.div>
 
+        {/* Developer Credit */}
+        <motion.div
+          className="poster-developer"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+        >
+          <div className="developer-card">
+            <div className="card-top">
+              <span className="card-label">DEVELOPED BY</span>
+            </div>
+            <div className="card-name">SONU KUMAR RAY</div>
+            <div className="card-message">BELIEVE</div>
+          </div>
+        </motion.div>
+
         {/* Poster Indicators */}
         <motion.div
           className="poster-indicators"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
+          transition={{ duration: 0.6, delay: 1.1 }}
         >
           {posters.map((_, index) => (
             <button
