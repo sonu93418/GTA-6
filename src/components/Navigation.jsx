@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import './Navigation.css'
 
-const Navigation = () => {
+const Navigation = ({ onCharactersClick }) => {
   const [activeSection, setActiveSection] = useState('hero')
 
   const scrollToSection = (sectionId) => {
@@ -10,6 +10,14 @@ const Navigation = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
       setActiveSection(sectionId)
+    }
+  }
+
+  const handleCharactersClick = () => {
+    if (onCharactersClick) {
+      onCharactersClick()
+    } else {
+      scrollToSection('jason')
     }
   }
 
@@ -45,7 +53,7 @@ const Navigation = () => {
 
           <motion.button
             className={`nav-item ${activeSection === 'characters' ? 'active' : ''}`}
-            onClick={() => scrollToSection('jason')}
+            onClick={handleCharactersClick}
             whileHover={{ scale: 1.05, x: -10 }}
             transition={{ type: 'spring', stiffness: 400 }}
           >

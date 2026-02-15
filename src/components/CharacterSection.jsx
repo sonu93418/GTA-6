@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import './CharacterSection.css'
 
-const CharacterSection = ({ character, index }) => {
+const CharacterSection = ({ character, index, onSelectCharacter, onLearnMore }) => {
   const sectionRef = useRef(null)
   const [currentFrame, setCurrentFrame] = useState(0)
   
@@ -16,6 +16,29 @@ const CharacterSection = ({ character, index }) => {
     threshold: 0.2,
     triggerOnce: false
   })
+
+  const handleSelectCharacter = (e) => {
+    console.log('🎮 SELECT CHARACTER clicked!', character.id)
+    e.preventDefault()
+    e.stopPropagation()
+    if (onSelectCharacter) {
+      onSelectCharacter()
+    }
+  }
+
+  const handleLearnMore = (e) => {
+    console.log('📖 LEARN MORE clicked!', character.id)
+    e.preventDefault()
+    e.stopPropagation()
+    if (onLearnMore) {
+      onLearnMore()
+    }
+  }
+
+  // Debug: Log when component renders
+  useEffect(() => {
+    console.log('🎬 CharacterSection rendered for:', character.id, character.name)
+  }, [])
 
   // Scroll-based frame transitions
   useEffect(() => {
@@ -133,23 +156,22 @@ const CharacterSection = ({ character, index }) => {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          style={{ opacity }}
         >
-          <motion.div className="character-label" variants={itemVariants}>
+          <motion.div className="character-label" variants={itemVariants} style={{ opacity }}>
             {character.label}
           </motion.div>
           
-          <motion.h2 className="character-name" variants={itemVariants}>
+          <motion.h2 className="character-name" variants={itemVariants} style={{ opacity }}>
             {character.name.split('\n').map((line, i) => (
               <span key={i}>{line}<br /></span>
             ))}
           </motion.h2>
 
-          <motion.p className="character-description" variants={itemVariants}>
+          <motion.p className="character-description" variants={itemVariants} style={{ opacity }}>
             {character.description}
           </motion.p>
 
-          <motion.div className="character-stats" variants={itemVariants}>
+          <motion.div className="character-stats" variants={itemVariants} style={{ opacity }}>
             {character.stats.map((stat, i) => (
               <motion.div 
                 key={i} 
@@ -169,6 +191,35 @@ const CharacterSection = ({ character, index }) => {
                 <div className="stat-value">{stat.value}</div>
               </motion.div>
             ))}
+          </motion.div>
+
+          <motion.div 
+            className="character-actions" 
+            variants={itemVariants}
+            style={{ pointerEvents: 'auto' }}
+          >
+            <button
+              className="character-button primary"
+              onClick={handleSelectCharacter}
+              onMouseDown={(e) => console.log('Button mousedown:', character.id)}
+              style={{ 
+                '--button-color': character.color 
+              }}
+            >
+              <span className="button-text">SELECT CHARACTER</span>
+              <span className="button-icon">→</span>
+            </button>
+            
+            <button
+              className="character-button secondary"
+              onClick={handleLearnMore}
+              onMouseDown={(e) => console.log('Button mousedown:', character.id)}
+              style={{ 
+                '--button-color': character.color 
+              }}
+            >
+              <span className="button-text">LEARN MORE</span>
+            </button>
           </motion.div>
         </motion.div>
       </div>

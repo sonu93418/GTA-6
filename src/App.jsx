@@ -5,10 +5,13 @@ import Navigation from './components/Navigation'
 import HeroSection from './components/HeroSection'
 import CharacterSection from './components/CharacterSection'
 import FinalSection from './components/FinalSection'
+import CharacterModal from './components/CharacterModal'
 import './App.css'
 
 function App() {
   const [loading, setLoading] = useState(true)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedCharacter, setSelectedCharacter] = useState(null)
 
   useEffect(() => {
     // Initialize Lenis smooth scroll
@@ -77,9 +80,9 @@ function App() {
       name: 'RAUL\nBAUTISTA',
       description: 'A tech-savvy hacker with a dark past, Raul can breach any security system in Vice City. His digital prowess and street smarts make him an invaluable asset in the crew\'s most complex operations.',
       images: [
-        '/page-3 Raul Bautista/Hero_BG.webp',
         '/page-3 Raul Bautista/Raul_Bautista_01.b4438643.jpg',
-        '/page-3 Raul Bautista/Raul_Bautista_03.webp'
+        '/page-3 Raul Bautista/Raul_Bautista_03.webp',
+        '/page-3 Raul Bautista/Hero_BG.webp'
       ],
       stats: [
         { label: 'HACKING', value: 98 },
@@ -94,9 +97,9 @@ function App() {
       name: 'REAL\nDIMEZ',
       description: 'A legendary enforcer known for his ruthless efficiency, Real Dimez controls the underground weapons trade. When things go sideways, he\'s the one you want watching your back in Vice City\'s most dangerous situations.',
       images: [
-        '/page-4 Real Dimez/Hero_BG.webp',
         '/page-4 Real Dimez/Real_Dimez_01.webp',
-        '/page-4 Real Dimez/Real_Dimez_03.webp'
+        '/page-4 Real Dimez/Real_Dimez_03.webp',
+        '/page-4 Real Dimez/Hero_BG.webp'
       ],
       stats: [
         { label: 'STRENGTH', value: 96 },
@@ -108,17 +111,38 @@ function App() {
     }
   ]
 
+  const openModal = (character) => {
+    setSelectedCharacter(character)
+    setModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setModalOpen(false)
+  }
+
   return (
     <>
       {loading && <LoadingScreen />}
-      <Navigation />
+      <Navigation onCharactersClick={() => setModalOpen(true)} />
       <main>
         <HeroSection />
         {characters.map((character, index) => (
-          <CharacterSection key={character.id} character={character} index={index} />
+          <CharacterSection 
+            key={character.id} 
+            character={character} 
+            index={index}
+            onSelectCharacter={() => openModal(character)}
+            onLearnMore={() => openModal(character)}
+          />
         ))}
         <FinalSection />
       </main>
+      <CharacterModal 
+        isOpen={modalOpen}
+        onClose={closeModal}
+        characters={characters}
+        selectedCharacter={selectedCharacter}
+      />
     </>
   )
 }
